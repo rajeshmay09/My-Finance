@@ -1,0 +1,27 @@
+{
+  "name": "my-finance",
+  "version": "1.0.0",
+  "description": "A personal finance app is a great way to apply your Node.js skills to a real-world problem that can benefit you directly. While it might not have the \"industrial scale\" of handling millions of simultaneous users like Netflix, you can still build it with robust architecture and best practices to make it highly reliable, secure, and extensible.",
+  "homepage": "https://github.com/rajeshmay09/My-Finance#readme",
+  "bugs": {
+    "url": "https://github.com/rajeshmay09/My-Finance/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajeshmay09/My-Finance.git"
+  },
+  "license": "ISC",
+  "author": "rajesh",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+   "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
