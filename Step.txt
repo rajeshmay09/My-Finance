@@ -1,0 +1,40 @@
+Prerequisites
+Install Node.js LTS, verified with: node -v and npm -v; create a project folder and initialize npm with npm init -y to generate package.json for dependencies and scripts.
+
+Step 1: Hello Express
+Install Express with npm install express, create index.js, add express.json middleware, define GET / route, and start on port 3000 to see “Welcome” in the browser or curl output.
+
+Step 2: Project structure
+Keep a clean layout: src/server.js (or index.js), src/routes, src/controllers, src/middleware, and a package.json script for dev using nodemon for auto-reload during learning.
+
+Step 3: Core Express concepts
+Learn routing (app.get/post/put/delete), middleware (app.use for JSON parsing and custom handlers), and error handling with a final error middleware to standardize responses.
+
+Step 4: First resource: categories
+Build CRUD for /categories to practice REST: GET list, POST create, PUT update, DELETE remove; store in-memory first so Express and REST patterns are learned before databases.
+
+Step 5: Add transactions
+Implement /transactions with amount, type (income/expense), categoryId, date, and note; add filtering by date and category via query params to learn route params vs query strings.
+
+Step 6: Summaries endpoint
+Add /reports/summary?period=month to return totals and net cash flow computed from the in-memory transaction list to practice array transforms and basic business logic in Express controllers.
+
+Step 7: Beginner authentication
+Add barebones email/password endpoints: POST /auth/register and /auth/login returning a fake token initially, then swap in JWT later; this teaches JSON body handling and response patterns.
+
+Step 8: Persistence next (optional now)
+Once comfortable with Express, add PostgreSQL via Prisma ORM: define schema models (User, Account, Category, Transaction, Budget), set DATABASE_URL in .env, run Prisma migrate, 
+and replace in-memory stores with prisma client calls.
+
+
+Here are five core features to start a simple Node.js finance app:
+
+Transactions CRUD and categories: Add, edit, delete, and list income/expense transactions with tags like Food, Rent, Utilities, and custom categories for flexible reporting.
+
+Budgets with alerts: Create monthly category budgets (e.g., Groceries: ₹10,000) and track spend vs budget with simple thresholds that trigger email/in-app alerts.
+
+Balance and summaries: Maintain running account balances and show daily/weekly/monthly summaries with totals, category breakdowns, and net cash flow.
+
+Import/export CSV: Allow importing bank/exported CSVs into transactions with a simple field mapper, and export filtered transactions or monthly reports to CSV.
+
+Basic auth and roles: Email-password signup/login with JWT sessions, password reset, and a future-ready role layer for admin vs standard users.
