@@ -15,4 +15,8 @@ const updateCategory = z.object({
   }),
 });
 
-module.exports = { createCategory, updateCategory };
+const idParam = z.object({
+  params: z.object({ id: z.string().regex(/^\d+$/) }),
+});
+
+module.exports = { createCategory, updateCategory, idParam };

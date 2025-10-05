@@ -3,16 +3,32 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+const helmet = require("helmet");
+const morgan = require("morgan");
+const cors = require("cors");
+
+app.use(helmet());
+app.use(morgan("dev"));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 
 const categoriesRouter = require("./routes/categories");
 const transactionsRouter = require("./routes/transactions");
+const authRouter = require("./routes/auth");
+const { auth } = require("../src/middleware/auth");
 
+app.use("/auth", authRouter);
 app.use("/categories", categoriesRouter);
 app.use("/transactions", transactionsRouter);
 
 app.get("/", (req, res) => {
   res.send("hello finance");
+});
+
+app.use((req, res) => res.status(404).json({ error: "Not found" }));
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Server error" });
 });
 
 app.listen(PORT, () => {
