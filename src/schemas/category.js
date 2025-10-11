@@ -1,4 +1,5 @@
 const { z } = require("zod");
+const { paginationQuery } = require("./common");
 
 const createCategory = z.object({
   body: z.object({
@@ -15,8 +16,12 @@ const updateCategory = z.object({
   }),
 });
 
+const listCategories = z.object({
+  query: paginationQuery,
+});
+
 const idParam = z.object({
   params: z.object({ id: z.string().regex(/^\d+$/) }),
 });
 
-module.exports = { createCategory, updateCategory, idParam };
+module.exports = { createCategory, updateCategory, listCategories, idParam };

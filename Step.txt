@@ -38,3 +38,62 @@ Balance and summaries: Maintain running account balances and show daily/weekly/m
 Import/export CSV: Allow importing bank/exported CSVs into transactions with a simple field mapper, and export filtered transactions or monthly reports to CSV.
 
 Basic auth and roles: Email-password signup/login with JWT sessions, password reset, and a future-ready role layer for admin vs standard users.
+
+
+
+//------------------------------------------------------------------------------------------------------------------------
+
+Great—stay in-memory and add practical features that deepen Express skills. Below are recommended additions with brief rationale.
+
+### Budgets and alerts
+- Add /budgets CRUD to set per-category monthly limits and a /budgets/summary endpoint that computes spent vs allocation and flags over-threshold categories for simple notifications or UI badges. This rounds out planning and tracking beyond raw transactions.[1][2]
+- Implement alert thresholds (e.g., 80%) and return a status field like "ok", "warning", "over" per category for quick consumption by a frontend or CLI.[2][1]
+
+### CSV import/export
+- Provide POST /transactions/import to accept CSV text and map headers to fields, enabling bulk entry from bank statements while still using in-memory storage for learning workflows.[1][2]
+- Provide GET /reports/export?period=month to return a CSV of the month’s transactions or a category summary table for easy sharing and spreadsheet analysis.[2][1]
+
+### Pagination and filters
+- Standardize list endpoints with ?page=&limit= and optional sorting (?sort=amount:desc) so lists remain usable as data grows, teaching consistent query parsing patterns.[3][4]
+- Extend filters: support min/max amount and text search in note/category name to practice composing filters safely alongside validation.[4][3]
+
+### Consistent validation and errors
+- Expand Zod schemas across all routes (delete IDs, pagination, import formats), and adopt a uniform error shape { error, details, code } to simplify client handling and debugging patterns.[5][6]
+- Add precondition checks (e.g., category must exist for a transaction) with 422 responses, reinforcing domain constraints at the API boundary.[6][5]
+
+### Reporting endpoints
+- Add /reports/categories?period=month to return totals per category with income/expense split for charting and deeper learning of aggregation logic.[7][4]
+- Add /reports/daily?from=&to= to return day-by-day net flow to practice grouping and time-window calculations in controllers.[4][7]
+
+### Security-friendly polish (still in-memory)
+- Keep bcrypt hashing for users and protect write endpoints; add rate limiting to /auth/login and optionally to import/export to prevent accidental overuse during testing.[8][9]
+- Maintain Helmet and CORS; continue to log requests with Morgan to observe behavior as features expand without changing storage.[9][10]
+
+### Optional quality-of-life
+- Seed data endpoint POST /dev/seed (guarded in non-production via NODE_ENV) to reset and populate sample categories and transactions for quicker testing cycles.[1][2]
+- Health and version endpoints: GET /health and GET /version to practice lightweight ops-style endpoints useful even in simple projects.[10][9]
+
+If desired next, code can be provided for budgets CRUD + summary and CSV import/export with Zod validation and clear error responses, keeping everything in-memory while reinforcing Express controllers, validation, and middleware skills.[2][1]
+
+
+-------------------------------------------------------------------
+Short answer: it’s solid for a learning-ready MVP, but not fully “complete” for JWT, transactions/categories, and security yet; a few targeted gaps remain before calling the in‑memory API feature-complete.[1][2]
+
+### JWT status
+- Implemented: register/login issuing short‑lived JWTs and a middleware verifying Authorization: Bearer tokens; bcrypt hashing protects stored credentials in memory.[3][1]
+- Gaps: no refresh tokens or rotation, no token revocation/blacklist, no role/permission checks, and no secret management beyond a dev default; add short expiry, plan refresh, and store secrets via env for a more complete setup.[4][5]
+
+### Transactions and categories
+- Implemented: categories CRUD and transactions list/create with query filters, plus a monthly summary endpoint for income, expenses, and net; routes use Router, controllers, and Zod validation.[2][6]
+- Gaps: pagination and consistent sorting across lists, stronger validation on dates/amounts and cross‑checks (e.g., category exists when creating a transaction), and richer reporting endpoints (per‑category totals, daily net).[7][2]
+
+### Security baseline
+- Implemented: bcrypt password hashing, Helmet security headers, CORS for local dev, optional rate limiting for login; error handling and 404s in correct middleware order.[8][9]
+- Gaps: no brute‑force and enumeration defenses beyond basic rate limiting, no standardized error schema everywhere, no audit/log events for auth attempts, and no CSRF considerations for cookie‑based flows (not needed for pure token APIs).[10][8]
+
+### Recommended next actions (still in‑memory)
+- JWT: enforce a shorter access‑token expiry, document header usage, and add a refresh‑token plan even if not implemented yet to clarify auth lifecycle decisions.[5][4]
+- Data endpoints: add pagination (?page, ?limit), sorting, and stricter Zod schemas for dates/amounts; add a check that categoryId exists when posting a transaction.[2][7]
+- Security: keep Helmet/CORS; strengthen rate limiting on /auth/login; unify error responses and log auth failures distinctly for visibility.[9][8]
+
+With these small increments, the in‑memory API will be well-rounded for JWT, core resources, and baseline security, while remaining simple enough to learn from before introducing a database.[1][2]

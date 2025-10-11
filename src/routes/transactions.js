@@ -12,6 +12,8 @@ const { auth } = require("../middleware/auth");
 
 router.get("/", validate(listTransactions), ctrl.list);
 router.post("/", auth, validate(createTransaction), ctrl.create);
+
+module.exports = router;
 //--------------------------
 //Route /transactions → requireDemoAuth checks token
 // POST /transactions → validate middleware parses & checks body
@@ -21,7 +23,7 @@ router.post("/", auth, validate(createTransaction), ctrl.create);
 // Using routers keeps the app modular
 // Zod makes input validation easy and structured
 //--------------------------
-module.exports = router;
+
 // const transactions = [];
 // let nextTxnId = 1;
 

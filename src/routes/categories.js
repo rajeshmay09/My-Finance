@@ -5,11 +5,12 @@ const { validate } = require("../middleware/validate");
 const {
   createCategory,
   updateCategory,
+  listCategories,
   idParam,
 } = require("../schemas/category");
 const ctrl = require("../controllers/categories.controller");
 
-router.get("/", ctrl.list);
+router.get("/", validate(listCategories), ctrl.list);
 router.post("/", validate(createCategory), ctrl.create);
 router.put("/:id", validate(updateCategory), ctrl.update);
 router.delete("/:id", validate(idParam), ctrl.remove);
