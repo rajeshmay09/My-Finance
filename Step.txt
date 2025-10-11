@@ -97,3 +97,43 @@ Short answer: it’s solid for a learning-ready MVP, but not fully “complete�
 - Security: keep Helmet/CORS; strengthen rate limiting on /auth/login; unify error responses and log auth failures distinctly for visibility.[9][8]
 
 With these small increments, the in‑memory API will be well-rounded for JWT, core resources, and baseline security, while remaining simple enough to learn from before introducing a database.[1][2]
+
+
+------------------------------------------------------------------------------------------------------------------
+
+Yes, the in-memory API is ready to run and test end-to-end with the features built so far, including auth, categories, transactions, summaries, pagination/sorting,
+ stricter validation, and reporting endpoints. It’s designed for learning without a database, so data resets on server restart, but all routes and 
+ flows can be exercised now with curl or Postman/Insomnia using JSON and standard headers.​
+
+How to test quickly:
+
+Start the server: run the dev script set up earlier (for example, nodemon index.js) and confirm the Hello route responds, ensuring Express and middleware are wired correctly.​
+
+Register and login: call POST /auth/register then POST /auth/login to obtain a JWT; this verifies bcrypt hashing and the token issuing path is functioning as expected.​
+
+Categories CRUD: create a few categories via POST /categories, then GET /categories?page=1&limit=10&sort=name:asc to validate pagination and sorting behavior at the list layer.​
+
+Transactions flow: POST /transactions with Authorization: Bearer <token> to ensure protection is enforced, then GET /transactions with filters like from/to and
+ categoryId to confirm query handling and stricter date/amount rules.​
+
+Cross-entity check: attempt to create a transaction with a non-existent categoryId and expect a 422 domain error, confirming integrity checks at the controller level.​
+
+Reports: GET /reports/summary for monthly totals, /reports/categories for per-category totals, and /reports/daily?from=YYYY-MM-DD&to=YYYY-MM-DD for the daily net series 
+to validate aggregation endpoints.​
+
+Security polish: confirm Helmet headers appear, CORS allows requests from the dev origin if used, and repeated bad logins trigger the configured rate limiting response code and message.​
+
+What to expect:
+
+Public reads (e.g., GET /transactions) work without a token, while protected writes (e.g., POST /transactions) require Bearer authentication to pass,
+ demonstrating middleware order and auth flow clearly.​
+
+Validation errors return 400 with details from Zod, missing/invalid tokens return 401, not found returns 404, and domain violations like missing category return 422,
+giving a consistent error shape across routes for learning and debugging
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE3NjAxOTA4MjcsImV4cCI6MTc2MDE5NDQyN30.hV8EGxxfxNjdojLze6BtYfn6DUyvjNPeTN2W9K2YCuA
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE3NjAxOTA4NjIsImV4cCI6MTc2MDE5NDQ2Mn0.Cei_qH4dCjf4o-DzE0gbzFZKzdbBLbFtcg5y4W2ddgk

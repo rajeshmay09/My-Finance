@@ -16,13 +16,18 @@ const categoriesRouter = require("./routes/categories");
 const transactionsRouter = require("./routes/transactions");
 const authRouter = require("./routes/auth");
 const { auth } = require("../src/middleware/auth");
+const reportsRouter = require("./routes/reports");
 
 app.use("/auth", authRouter);
 app.use("/categories", categoriesRouter);
 app.use("/transactions", transactionsRouter);
+app.use("/reports", reportsRouter);
 
 app.get("/", (req, res) => {
-  res.send("hello finance");
+  //res.send("hello finance");
+  res.status(200).json({
+    meassage: "Welcome to simple api",
+  });
 });
 
 app.use((req, res) => res.status(404).json({ error: "Not found" }));

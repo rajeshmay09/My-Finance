@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const { z } = require("zod");
-
+const bcrypt = require("bcrypt");
 const { validate } = require("../middleware/validate");
 const { issue } = require("../middleware/auth");
 

@@ -3,8 +3,27 @@
 const categories = [];
 let nextCatId = 1;
 
+function applySort(list, sort) {
+  const [field, dir] = sort.split(":");
+  const mult = dir === "desc" ? -1 : 1;
+  return [...list].sort((a, b) => {
+    const av = a[field];
+    const bv = b[field];
+    if (av < bv) return -1 * mult;
+    if (av > bv) return 1 * mult;
+    return 0;
+  });
+}
+
 function list(req, res) {
-  res.json(categories);
+  const { page, limit, sort } = req.validated.query;
+  const sorted = applySort(categories, sort);
+  const p = Number(page) || 1;
+  const l = Number(limit) || 10;
+  const offset = (p - 1) * l;
+  const items = sorted.slice(offset, offset + l);
+  res.json({ page: p, limit: l, total: categories.length, items });
+  //res.json(categories);
 }
 
 function create(req, res) {
@@ -32,4 +51,4 @@ function remove(req, res) {
   res.status(204).end();
 }
 
-module.exports = { list, create, update, remove };
+module.exports = { list, create, update, remove, _categories: categories };

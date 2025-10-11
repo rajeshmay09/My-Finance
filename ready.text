@@ -1,0 +1,65 @@
+ Test-ready checklist of everything added so far in the in-memory Node.js finance API
+
+Core setup and structure
+
+Node.js project initialized with Express server and JSON body parsing.
+
+Clean project layout: index entry, routes per feature, controllers for logic, schemas for validation, middleware utilities.
+
+Express Router used to split features (auth, categories, transactions, reports).
+
+Validation and middleware
+
+Zod-based validation middleware for body, params, and query.
+
+Standardized error handling: 400 for validation, 401 for auth, 404 for not found, 422 for domain rule violations, 500 for server errors.
+
+Middleware order correct: JSON parsing → security/logging → routes → 404 → error handler.
+
+Authentication and security
+
+JWT auth flow: register, login, token issuance and verification via Authorization: Bearer.
+
+Password hashing with bcrypt on registration; verification with bcrypt.compare on login.
+
+Protected write endpoints (e.g., POST /transactions), public read endpoints for easy testing.
+
+Security headers via Helmet, CORS enabled for local development, request logging with Morgan.
+
+Focused rate limiting on login route to mitigate brute-force attempts.
+
+Categories
+
+In-memory Categories CRUD: POST/GET/PUT/DELETE /categories.
+
+Pagination and sorting for list: ?page=&limit=&sort=field:dir (e.g., name:asc).
+
+Zod schemas for create/update/list/id params.
+
+Transactions
+
+In-memory Transactions: GET /transactions with filters, POST /transactions protected by JWT.
+
+Filters supported: categoryId, from, to.
+
+Pagination and sorting for list: ?page=&limit=&sort=field:dir (e.g., date:desc, amount:asc).
+
+Stronger validation: positive finite amount, date as ISO or YYYY-MM-DD.
+
+Cross-entity integrity check: categoryId must exist (422 if not).
+
+Reporting
+
+Monthly summary: GET /reports/summary returning income, expense, net, and period window.
+
+Per-category monthly totals: GET /reports/categories sorted by total magnitude.
+
+Daily net series: GET /reports/daily?from=&to= returning income, expense, net per day.
+
+Conventions and responses
+
+Consistent JSON response shapes for lists: { page, limit, total, items }.
+
+Consistent sort format: sort=field:dir.
+
+Clear error messages for validation and domain violations.

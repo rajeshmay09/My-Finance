@@ -15,6 +15,11 @@ router.post("/", validate(createCategory), ctrl.create);
 router.put("/:id", validate(updateCategory), ctrl.update);
 router.delete("/:id", validate(idParam), ctrl.remove);
 
+//http://localhost:3000/categories?page=2&limit=10
+//http://localhost:3000/categories?sort=name:asc
+//http://localhost:3000/categories?sort=name:desc
+//-----------------------------------------------------------
+
 // const categories = [];
 // let nextCatId = 1;
 
